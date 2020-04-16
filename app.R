@@ -210,7 +210,7 @@ server <- function(input, output) {
      
      get_dyn_ggplot(demand_supply_dynamics, "Preisdynamik", 
                     eq_price=eq_price_2()) + 
-       ggtitle(TeX("Preisdynamik Fall 2"))
+       ggtitle("Preisdynamik Fall 2")
    })
    output$dyn_2 <- renderPlot({
      validate(need(input$intercept_supply_2<input$intercept_demand_2, 
@@ -265,7 +265,7 @@ server <- function(input, output) {
      
      get_dyn_ggplot(demand_supply_dynamics, "Preisdynamik", 
                     eq_price=eq_price_3()) + 
-       ggtitle(TeX("Preisdynamik Fall 3"))
+       ggtitle("Preisdynamik Fall 3")
    })
    output$dyn_3 <- renderPlot({
      validate(need(input$intercept_supply_3<input$intercept_demand_3, 
