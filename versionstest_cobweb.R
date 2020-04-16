@@ -27,5 +27,6 @@ if (TRUE %in% versionstest){
 if (!require(devtools)) install.packages('devtools')
 if (!require(shiny)) install.packages('shiny')
 if (!require(ggplot2)) install.packages('ggplot2')
+if (!require(tibble)) install.packages('tibble')
 if (!require(magrittr)) install.packages('magrittr')
 if (!require(ggpubr)) install.packages('ggpubr')

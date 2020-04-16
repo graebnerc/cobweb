@@ -1,6 +1,7 @@
 library(shiny)
 library(ggplot2)
 library(ggpubr)
+library(tibble)
 source("helpers.R")
 p_range <- seq(0, 10, 0.1)
 t_input <- seq(0, 40)
@@ -154,7 +155,7 @@ server <- function(input, output) {
      
      get_dyn_ggplot(demand_supply_dynamics, "Preisdynamik", 
                     eq_price=eq_price_1()) + 
-       ggtitle(TeX("Preisdynamik Fall 1"))
+       ggtitle("Preisdynamik Fall 1")
    })
    output$dyn_1 <- renderPlot({
      validate(need(input$intercept_supply_1<input$intercept_demand_1, 
