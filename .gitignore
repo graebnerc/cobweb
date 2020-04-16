@@ -2,3 +2,15 @@
 .Rhistory
 .RData
 .Ruserdata
+*.log
+*.md
+!README.md
+tmp*
+.DS_Store
+garbage
+quellen
+R
+beschreibung/*.out
+beschreibung/*.toc
+beschreibung/cobweb_modell_beschreibung.tex
+deploy_app.R
