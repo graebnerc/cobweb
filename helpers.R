@@ -56,10 +56,12 @@ demand_func <- function(p, intercept_d, slope_d){
 #'   
 #' @param price_range The price range; corresponds to x-axis.
 #' @param plot_n The number of the plot; will be added to the title
+#' @param equil Should the equilibrium price be marked?
 #' @return A ggplot object
 make_supply_demand_plot <- function(price_range, 
                                     intercept_nachfrage, intercept_angebot, 
-                                    slope_nachfrage, slope_angebot, plot_n){
+                                    slope_nachfrage, slope_angebot, plot_n,
+                                    equil=TRUE){
   demand <-demand_func(
     price_range, 
     intercept_d = intercept_nachfrage, 
@@ -78,7 +80,7 @@ make_supply_demand_plot <- function(price_range,
                       intercept_d = intercept_nachfrage, 
                       slope_d = slope_nachfrage)
   
-  ggplot(data=demand_supply_data,
+  sp_plot <- ggplot(data=demand_supply_data,
          mapping=aes(x=Preis)) +
     geom_line(aes(x=Preis, y=Nachfrage, color="Nachfrage")) +
     geom_line(aes(x=Preis, y=Angebot, color="Angebot")) +
@@ -86,18 +88,23 @@ make_supply_demand_plot <- function(price_range,
     coord_cartesian(ylim = c(0, 10), xlim = c(0, 11), 
                     expand = 0) + # expansion(mult = 0, add = 0)
     scale_color_manual(values = c(col_1, col_2)) +
-    geom_segment(aes(x = -Inf, y = q_eq, 
-                     xend = p_eq, yend = q_eq), 
-                 linetype="dashed", alpha=0.8, color="#1a171b") +
-    geom_segment(aes(x = p_eq, y = -Inf, 
-                     xend = p_eq, yend = q_eq), 
-                 linetype="dashed", alpha=0.8, color="#1a171b") +
     ggtitle(paste0("Angebot-Nachfrage Diagram ", plot_n)) +
     theme_bw() + 
     theme(panel.border = element_blank(), 
           axis.line = element_line(), 
           legend.title = element_blank(), 
           legend.position = "bottom")
+  
+  if (equil){
+    sp_plot <- sp_plot +
+      geom_segment(aes(x = -Inf, y = q_eq, 
+                       xend = p_eq, yend = q_eq), 
+                   linetype="dashed", alpha=0.8, color="#1a171b") +
+      geom_segment(aes(x = p_eq, y = -Inf, 
+                       xend = p_eq, yend = q_eq), 
+                   linetype="dashed", alpha=0.8, color="#1a171b")
+  }
+  return(sp_plot)
 }
 
 #' Create a plot with price adjustment dynamics
