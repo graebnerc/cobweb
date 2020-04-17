@@ -14,3 +14,4 @@ beschreibung/*.out
 beschreibung/*.toc
 beschreibung/cobweb_modell_beschreibung.tex
 deploy_app.R
+rsconnect
