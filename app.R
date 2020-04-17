@@ -121,7 +121,10 @@ ui <- fluidPage(
            h3("Benutzung der App"),
            p("Parameterwerte können auf der linken Seite geändert werden. Der Download Button unter der Abbildung erlaubt Ihnen die aktuelle Version der Abbildungen als PDF herunterzuladen."),
            h3("Leitfragen:"),
-           p("...")
+           p("1. Welchen Einfluss haben die Achsenabschnitte auf die Preisdynamiken?"),
+           p("2. Was sind die Implikationen unterschiedlicher Ausgangspreise?"),
+           p("3. Wie verändern sich die Preisanpassungsdynamiken bei unterschiedlichen Angebots- und Nachfrageelastizitäten?"),
+           p("4. Was sind die wichtigsten Determinanten der Konvergenz- bzw. Divergenzgeschwindigkeit? Was ist hier die Intuition?")
     )
   )
 )
