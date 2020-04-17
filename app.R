@@ -17,7 +17,7 @@ ui <- fluidPage(
            sliderInput("p_0", 
                        label='Ausgangspreis \\( p_0 \\)',
                        min = 0.5, max = 10, step=0.5, value = 5.0)
-           ),
+    ),
     column(3, 
            h3("Diagram 1"),
            sliderInput("intercept_supply_1", 
@@ -32,10 +32,21 @@ ui <- fluidPage(
            sliderInput("slope_demand_1", 
                        label='Steigung Nachfragekurve 1: \\( \\delta \\)',
                        min = -1.9, max = -0.1, step=0.05, value = -0.5)
-           ),
+    ),
     column(3,
-           h3("Diagram 2"),
+           h3("Angebot-Nachfrage-Diagramm zum erstem Fall"),
+           plotOutput("s_d_1")
+    ),
+    column(3,
+           h3("Preisanpassung im erstem Fall"),
+           plotOutput("dyn_1")
+    )
+  ),
+  fluidRow(
+    column(3),
+    column(3,
            conditionalPanel(
+             h3("Diagram 2"),
              condition = "input.n_plots>1",
              sliderInput("intercept_supply_2", 
                          label='Achsenabschnitt Angebotskurve 2: \\( \\zeta \\)',
@@ -49,11 +60,28 @@ ui <- fluidPage(
              sliderInput("slope_demand_2", 
                          label='Steigung Nachfragekurve 2: \\( \\iota \\)',
                          min = -1.9, max = -0.1, step=0.05, value = -0.5)
-           )
+             )
            ),
     column(3,
-           h3("Diagram 3"),
            conditionalPanel(
+             condition = "input.n_plots>1",
+             h3("Angebot-Nachfrage-Diagramm zum zweiten Fall"),
+             plotOutput("s_d_2")
+           )
+    ),
+    column(3,
+           conditionalPanel(
+             condition = "input.n_plots>1",
+             h3("Preisanpassung im zweiten Fall"),
+             plotOutput("dyn_2")
+           )
+    )
+  ),
+  fluidRow(
+    column(3),
+    column(3,
+           conditionalPanel(
+             h3("Diagram 3"),
              condition = "input.n_plots>2",
              sliderInput("intercept_supply_3", 
                          label='Achsenabschnitt Angebotskurve 3: \\( \\kappa \\)',
@@ -67,32 +95,23 @@ ui <- fluidPage(
              sliderInput("slope_demand_3", 
                          label='Steigung Nachfragekurve 3: \\( \\nu \\)',
                          min = -1.9, max = -0.1, step=0.05, value = -0.5)
-           )
-           )
-    ),
-  fluidRow(
-    column(3),
-    column(3,
-           h3("Abbildung zum erstem Fall"),
-           plotOutput("s_d_1"),
-           plotOutput("dyn_1")
-           ),
-    column(3,
-           conditionalPanel(
-             condition = "input.n_plots>1",
-             h3("Abbildung zweiter Fall"),
-             plotOutput("s_d_2"),
-             plotOutput("dyn_2")
              )
            ),
     column(3,
            conditionalPanel(
              condition = "input.n_plots>2",
-             h3("Dritter Fall"),
-             plotOutput("s_d_3"),
+             h3("Angebot-Nachfrage-Diagramm zum dritten Fall"),
+             plotOutput("s_d_3")
+           )
+    ),
+    column(3,
+           conditionalPanel(
+             condition = "input.n_plots>2",
+             h3("Preisanpassung im dritten Fall"),
              plotOutput("dyn_3")
-             )
-           )),
+           )
+    )
+  ),
   fluidRow(
     column(3),
     column(9,
@@ -103,9 +122,9 @@ ui <- fluidPage(
            p("Parameterwerte können auf der linken Seite geändert werden. Der Download Button unter der Abbildung erlaubt Ihnen die aktuelle Version der Abbildungen als PDF herunterzuladen."),
            h3("Leitfragen:"),
            p("...")
-           )
     )
   )
+)
 
 
 server <- function(input, output) {
