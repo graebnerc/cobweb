@@ -1,12 +1,11 @@
 library(shiny)
 library(ggplot2)
+library(magrittr)
 library(ggpubr)
-library(tibble)
 source("helpers.R")
 p_range <- seq(0, 10, 0.1)
 t_input <- seq(0, 40)
 
-# Define UI for application that draws a histogram
 ui <- fluidPage(
   withMathJax(),
   titlePanel("Das Cobweb Modell"),
@@ -111,7 +110,6 @@ ui <- fluidPage(
 
 server <- function(input, output) {
   # The first figure
-  
   eq_price_1 <- reactive({
     get_eq_price(
       intercept_supply=input$intercept_supply_1, 
@@ -149,7 +147,7 @@ server <- function(input, output) {
        timesteps=t_input
        )
      
-     demand_supply_dynamics <- tibble(
+     demand_supply_dynamics <- data.frame(
        Zeit=t_input,
        Preisdynamik=p_dynamics)
      
@@ -204,7 +202,7 @@ server <- function(input, output) {
        timesteps=t_input
      )
      
-     demand_supply_dynamics <- tibble(
+     demand_supply_dynamics <- data.frame(
        Zeit=t_input,
        Preisdynamik=p_dynamics)
      
@@ -259,7 +257,7 @@ server <- function(input, output) {
        timesteps=t_input
      )
      
-     demand_supply_dynamics <- tibble(
+     demand_supply_dynamics <- data.frame(
        Zeit=t_input,
        Preisdynamik=p_dynamics)
      
@@ -306,6 +304,4 @@ server <- function(input, output) {
 }
 
 
-# Run the application 
 shinyApp(ui = ui, server = server)
-
