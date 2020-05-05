@@ -3,7 +3,7 @@
 Diese App implementiert das Cobweb Modell.
 
 Eine genaue Beschreibung des Modells und der Implementierung findet sich in
-`beschreibung/Cobweb_Beschreibung.pdf`.
+`beschreibung/Cobweb_Modellbeschreibung.pdf`.
 
 Mögliche Leitfragen für die Experimente mit dem Modell:
 
