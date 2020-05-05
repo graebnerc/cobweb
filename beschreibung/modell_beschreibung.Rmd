@@ -25,7 +25,7 @@ R vermittelt werden.
 Das in diesem Text eingeführte Modell bildet auch die Grundlage für die
 Shiny-App, welche die Vorlesung ergänzt.
 
-Die folgenden R-Pakete werden dabei im Text verwendet:
+Die folgenden R-Pakete und Farben werden dabei im Text verwendet:
 
 ```{r packages, message=FALSE, warning=FALSE}
 library(tidyverse)
@@ -41,7 +41,7 @@ col_4 <- "1a171b"
 
 Die Kernidee des Cobweb-Modells ist die verzögerte Reaktion von 
 Produzenten auf Marktsignale. 
-Während der Name auch die Arbeiten von Nicholas Kaldor (1934), der das
+Während der Name auf die Arbeiten von Nicholas Kaldor (1934), der das
 Modell vor allem für Agrarmärkte für geeignet hielt, zurückgeht, können
 die theoretischen Ursprünge noch deutlich weiter zurückverfolgt werden
 (siehe z.B. Ezekiel 1938).
@@ -49,8 +49,8 @@ Während die Konsumenten ihre Zahlungsbereitschaft nach dem aktuellen Angebot
 ausrichten entscheiden Anbieter zwar ebenfalls auf Basis der aktuellen Preise,
 können ihr Angebot aber erst für die nächste Periode anpassen.
 In Agrarmärkten mag diese Annahme durchaus sinnvoll erscheinen, da Anbieter
-hier ihre Produktionentscheidung deutlich früher treffen müssen als wenn sie
-die angebauten Waren tatsächlich verkaufen können.^[Ein alternative Interpretation
+hier ihre Produktionsentscheidung deutlich vor dem eigentlichen 
+Verkaufsprozess treffen müssen.^[Ein alternative Interpretation
 ist, dass wir es mit einem einfachen Prozess der *Erwartungsbildung* zu tun haben:
 die Anbieter treffen ihre Produktionsentscheidung auf Basis des erwarteten 
 Preises in Periode $t$, $p^e_t$, wobei im Cobweb Modell die simplistische Erwartung
@@ -140,13 +140,14 @@ unterscheiden, wobei zu bedenken ist, dass durch $\mathcal{A}=\frac{\beta}{\delt
 das Verhältnis der Preiselastizitäten des Angebots ($\epsilon_S=\beta$) 
 und der Nachfrage ($\epsilon_D=\delta$) angegeben wird:
 
-* Konvergenz zum Gleichgewichtspreis wenn $|\mathcal{A}|<1$, also das Angebot elastischer ist als die Nachfrage
+* $|\mathcal{A}|<1$: das Angebot ist elastischer als die Nachfrage
 
-* Explodierende Dynamiken weg vom Gleichgewichtspreis wenn $|\mathcal{A}|>1$, also die Nachfrage elastischer ist als das Angebot 
+* $|\mathcal{A}|>1$: die Nachfrage ist elastischerals das Angebot 
 
-* Dauerhafte Oszillation um den Gleichgewichtspreis wenn $|\mathcal{A}|=1$, Angebot und Nachfrage also gleich elastisch sind
+* $|\mathcal{A}|=1$: Angebot und Nachfrage sind gleich elastisch
 
-Dieses Ergebnis wird im Folgenden durch eine Simulation intuitiv dargestellt.
+Die Implikationen für die Preisdynamiken können Sie unten durch Verwendung der
+Shiny-App selbst herleiten.
 
 Vorher leiten wir aber noch ein später hilfreiches Zwischenresultat her, mit dem
 wir den Preis in einer beliebigen Zeitperiode berechnen können. 
@@ -225,8 +226,10 @@ make_supply_demand_plot <- function(price_range,
   
   ggplot(data=demand_supply_data,
          mapping=aes(x=Preis)) +
-    geom_line(aes(x=Preis, y=Nachfrage, color="Nachfrage")) +
-    geom_line(aes(x=Preis, y=Angebot, color="Angebot")) +
+    geom_line(aes(x=Preis, y=Nachfrage, color="Nachfrage"), 
+              key_glyph = draw_key_rect) +
+    geom_line(aes(x=Preis, y=Angebot, color="Angebot"),
+              key_glyph = draw_key_rect) +
     xlab("Preis") + ylab("Menge") +
     coord_cartesian(ylim = c(0, 8)) +
     scale_color_manual(values = c(col_1, col_2)) +
@@ -252,10 +255,10 @@ Denn aus den oben beschriebenen Gleichungen ergibt sich ja, dass das Angebot
 im Bezug auf $p_t$ *vollkommen unelastisch* ist. Die Anbieter können auf 
 Preisänderungen in der aktuellen Periode in diesem Modell ja gar nicht reagieren.
 Erst in der nächsten Runde ist eine Reaktion möglich. Daher wäre, wenn wir
-die x-Achse in der Abbildung als $p_t$ interpretieren eine vertikale 
+die x-Achse in der Abbildung als $p_t$ interpretieren, eine vertikale 
 Angebotskurve passender. Wir können das Diagram also entweder als Beschreibung
 der langfristigen Situation im Gleichgewicht betrachten, oder aber - besser - wir 
-beachten, dass für das Angebot die x-Achse den Preis in $t-1$, die die Nachfrage 
+beachten, dass für das Angebot die x-Achse den Preis in $t-1$, für die Nachfrage 
 aber den Preis in $t$ angibt. 
 Letztere Interpretation macht es weiter unten leichter die Anpassungsdynamiken 
 zu visualisieren.
@@ -274,10 +277,11 @@ price_func <- function(p_0, intercept_demand, slope_demand,
 }
 ```
 
-Nun können wir recht einfach unterschiedliche Fälle vergleichen.
-Man wird sehen, dass die Konvergenzeigenschaften von den relativen Steigungen
+Nun können wir recht einfach unterschiedliche Fälle vergleichen und untersuchen
+wie die Konvergenzeigenschaften von den relativen Steigungen
 der Angebots- und Nachfragefunktion abhängen, also des relativen
-Preiselastizitäten, so wie im zweiten Abschnitt analytisch hergeleitet.
+Preiselastizitäten, so wie im zweiten Abschnitt beschrieben.
+Dazu simulieren wir zunächst die entsprechenden Daten:
 
 ```{r}
 p_init <- 2.5
@@ -309,7 +313,7 @@ demand_supply_dynamics <- tibble(
   Preisdynamik3=p_dynamics_equal)
 ```
 
-Der Einfachheit halber definieren wir folgende Hilfsfunktion für die 
+Der Einfachheit halber definieren wir zudem folgende Hilfsfunktion für die 
 dynamische Abbildung:
 
 ```{r}
@@ -325,61 +329,14 @@ get_dyn_ggplot <- function(data, y_val){
 }
 ```
 
-Diese Funktion verwenden wir für die dynamischen Plots:
-
-```{r}
-p1 <- get_dyn_ggplot(demand_supply_dynamics, "Preisdynamik1") + 
-  ggtitle(TeX("$\\epsilon_D>\\epsilon_S$"))
-
-p2 <- get_dyn_ggplot(demand_supply_dynamics, "Preisdynamik2") + 
-  ggtitle(TeX("$\\epsilon_D<\\epsilon_S$")) +
-  coord_cartesian(xlim = c(0, 10), ylim = c(-250, 250))
-
-p3 <- get_dyn_ggplot(demand_supply_dynamics, "Preisdynamik3") + 
-  ggtitle(TeX("$\\epsilon_D=\\epsilon_S$"))
-
-p_full <- ggarrange(p1, p2, p3, ncol = 3)
-p_full
-```
-
-Zur besseren Darstellung ergänzen wir noch die klassische
-Angebots-Nachfrage-Darstellung:
-
-```{r, message=FALSE}
-p_range <- seq(0, 40, 0.1)
-af1 <- make_supply_demand_plot(p_range, intercept_nachfrage, intercept_angebot,
-                               slope_nachfrage_large, slope_angebot) +
-  coord_cartesian(xlim = c(0, 25), ylim = c(0,6))  + 
-  ggtitle(TeX("$\\epsilon_D>\\epsilon_S$"))
-af2 <- make_supply_demand_plot(p_range, intercept_nachfrage, intercept_angebot,
-                               slope_nachfrage_small, slope_angebot) +
-  coord_cartesian(xlim = c(0, 25), ylim = c(0,6)) + 
-  ggtitle(TeX("$\\epsilon_D<\\epsilon_S$"))
-af3 <- make_supply_demand_plot(p_range, intercept_nachfrage, intercept_angebot,
-                               slope_nachfrage_med, slope_angebot) +
-  coord_cartesian(xlim = c(0, 25), ylim = c(0,6)) + 
-  ggtitle(TeX("$\\epsilon_D=\\epsilon_S$"))
-af_full <- ggarrange(af1, af2, af3, ncol = 3, common.legend = T, legend = "bottom")
-```
-
-```{r}
-af_full
-```
-
-
-
-Und produzieren folgenden Überblickplot:
-
-```{r}
-p_complete <- ggarrange(
-    af1, af2, af3,
-    p1, p2, p3,
-  ncol = 3, nrow = 2, common.legend = T, legend = "bottom")
-```
-```{r}
-p_complete
-```
-
+Mit diesen Funktionen kann nun eine Übersicht über die verschiedenen Fälle
+im Cobweb Modell erstellt werden. Da es sich dabei aber um Ihre Aufgabe im
+Rahmen der technischen Fingerübungen handelt wird auf die Ergebnisse hier nicht
+mehr eingegangen. 
+Im Folgenden wird der Anpassungsmechanismus für ein konkretes Beispiel noch 
+einmal Stück für Stück erläutert.
+Diese Beschreibung ist optional und richtet sich an Leser\*innen, die ein noch
+tieferes Verständnis der zugrundeliegenden Mechanismen des Modells wünschen.
 
 ## Zusammenfassende Beschreibung des Anpassungsalgorithmus
 
@@ -400,7 +357,7 @@ slope_nachfrage <- -0.7
 möchten. Diese Menge bestimmt sich nach $p_0$, der aber nicht Ergebnis eines 
 Aushandlungsprozesses zwischen Angebot und Nachfrage ist, sondern von der 
 Angebotsseite angenommen wurde. Denn bislang haben ja noch keine 
-Marktinteraktionen stattgefunden, aber die Produzenten müssen ja dennoch bereits
+Marktinteraktionen stattgefunden. Dennoch müssen die Produzenten 
 entscheiden wie viel sie produzieren sollen. Alternativ können wir annehmen,
 dass $p_0$ der Gleichgewichtspreis aus vergangenen Interaktionen ist, seitdem
 aber ein exogener Angebots- oder Nachfrageschock eingetreten ist.
@@ -483,7 +440,7 @@ situation_t1
 ```
 
 3. Die Produzenten entscheiden jetzt was sie nächste Runde produzieren sollen.
-Da dieses mal der Marktpreis `r round(p_d_1, 2)` betrug und das Angebot in $t+1$ auf Basis
+Da diesmal der Marktpreis `r round(p_d_1, 2)` betrug und das Angebot in $t+1$ auf Basis
 von $p_t$ gebildet wird, berechnen wir die Angebotsmenge in $t_2$ folgendermaßen:
 
 ```{r}
@@ -576,9 +533,8 @@ print(paste0("Preis bei dem q* angeboten wird: ", p_s))
 
 Das bedeutet, dass wir in unserem Fall
 schlussendlich bei der *Gleichgewichtsmenge* und dem 
-*Gleichgewichtspreis* angekommen sind. Dies ist der Fall, da wir es mit einer
-Situation zu tun haben, in der die Nachfrage preis-elastischer ist als das 
-Angebot. Die folgende Abbildung illustriert hier noch einmal den gesamten 
+*Gleichgewichtspreis* angekommen sind. 
+Die folgende Abbildung illustriert hier noch einmal den gesamten 
 Prozess:
 
 ```{r, echo=FALSE}
@@ -640,6 +596,6 @@ situation_teq
 ```
 
 In anderen Konstellationen wäre eine solche Konvergenz unter 
-Umständen nicht zu erwarten. Sie können die oben diskutierten Beispiele
+Umständen nicht zu erwarten. Sie können verschiedene Beispiele
 dabei gerne mit konkreten Zahlenbeispielen selbst durchrechnen, bzw. mit der 
 Shiny-App experimentieren.
