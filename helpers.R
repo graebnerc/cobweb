@@ -57,11 +57,12 @@ demand_func <- function(p, intercept_d, slope_d){
 #' @param price_range The price range; corresponds to x-axis.
 #' @param plot_n The number of the plot; will be added to the title
 #' @param equil Should the equilibrium price be marked?
+#' @param fix_coord Should the coordination system should be fixed in (0, 10)?
 #' @return A ggplot object
 make_supply_demand_plot <- function(price_range, 
                                     intercept_nachfrage, intercept_angebot, 
                                     slope_nachfrage, slope_angebot, plot_n,
-                                    equil=TRUE){
+                                    equil=TRUE, fix_coord=TRUE){
   demand <-demand_func(
     price_range, 
     intercept_d = intercept_nachfrage, 
@@ -87,8 +88,8 @@ make_supply_demand_plot <- function(price_range,
     geom_line(aes(x=Preis, y=Angebot, color="Angebot"), 
               key_glyph = draw_key_rect) +
     xlab("Preis") + ylab("Menge") +
-    coord_cartesian(ylim = c(0, 10), xlim = c(0, 11), 
-                    expand = 0) + # expansion(mult = 0, add = 0)
+    scale_x_continuous(expand = expansion(mult = c(0, 0), add = c(2, 2))) + 
+    scale_y_continuous(expand = expansion(mult = c(0, 0), add = c(2, 2))) + 
     scale_color_manual(values = c(col_1, col_2)) +
     ggtitle(paste0("Angebot-Nachfrage Diagram ", plot_n)) +
     theme_bw() + 
@@ -96,7 +97,10 @@ make_supply_demand_plot <- function(price_range,
           axis.line = element_line(), 
           legend.title = element_blank(), 
           legend.position = "bottom")
-  
+  if (fix_coord){
+    sp_plot <- sp_plot +
+      coord_cartesian(ylim = c(-2, 12), xlim = c(0, 10.5), expand = FALSE) 
+  }
   if (equil){
     sp_plot <- sp_plot +
       geom_segment(aes(x = -Inf, y = q_eq, 

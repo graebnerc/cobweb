@@ -14,6 +14,7 @@ ui <- fluidPage(
            h3("Grundeinstellungen"),
            numericInput("n_plots", label = h3("Anzahl Plots"), 
                         value = 1, min = 1, max = 3, step = 1),
+           checkboxInput("fix_coordinates", "Achsenabschnitte fixieren?", value = T),
            sliderInput("p_0", 
                        label='Ausgangspreis \\( p_0 \\)',
                        min = 0.5, max = 10, step=0.5, value = 5.0)
@@ -31,7 +32,8 @@ ui <- fluidPage(
                        min = 0.5, max = 10.0, step=0.5, value = 5.0),
            sliderInput("slope_demand_1", 
                        label='Steigung Nachfragekurve 1: \\( \\delta \\)',
-                       min = -1.9, max = -0.1, step=0.05, value = -0.5)
+                       min = -1.9, max = -0.1, step=0.05, value = -0.5),
+           checkboxInput("cobweb_dyn1", "Cobweb-Dynanik anzeigen", value = F)
     ),
     column(3,
            h3("Angebot-Nachfrage-Diagramm zum erstem Fall"),
@@ -59,7 +61,8 @@ ui <- fluidPage(
                          min = 0.5, max = 10.0, step=0.5, value = 5.0),
              sliderInput("slope_demand_2", 
                          label='Steigung Nachfragekurve 2: \\( \\iota \\)',
-                         min = -1.9, max = -0.1, step=0.05, value = -0.5)
+                         min = -1.9, max = -0.1, step=0.05, value = -0.5),
+             checkboxInput("cobweb_dyn2", "Cobweb-Dynanik anzeigen", value = F)
              )
            ),
     column(3,
@@ -94,7 +97,8 @@ ui <- fluidPage(
                          min = 0.5, max = 10.0, step=0.5, value = 5.0),
              sliderInput("slope_demand_3", 
                          label='Steigung Nachfragekurve 3: \\( \\nu \\)',
-                         min = -1.9, max = -0.1, step=0.05, value = -0.5)
+                         min = -1.9, max = -0.1, step=0.05, value = -0.5),
+             checkboxInput("cobweb_dyn3", "Cobweb-Dynanik anzeigen", value = F)
              )
            ),
     column(3,
@@ -119,7 +123,7 @@ ui <- fluidPage(
            h3("Beschreibung des Modells"),
            p("Eine genaue Beschreibung des Modelles und der Implementierung in R finden Sie im Begleitdokument (Moodle oder auf Github im Ordner 'beschreibung')."),
            h3("Benutzung der App"),
-           p("Parameterwerte können auf der linken Seite geändert werden. Der Download Button unter der Abbildung erlaubt Ihnen die aktuelle Version der Abbildungen als PDF herunterzuladen."),
+           p("Parameterwerte können auf der linken Seite geändert werden. Der Download Button unter der Abbildung erlaubt Ihnen die aktuelle Version der Abbildungen als PDF herunterzuladen. Mit der Option 'Koordinatensystem fixieren' können Sie die x- und y-Achenabschnitte über verschiedene Abbildungen fixeren und leichter vergleichen. Die Option 'Anpassungsdynamiken anzeigen' erlaubt es Ihnen das eigentliche 'Spinnennetz' in den Abbildungen anzuzeigen."),
            h3("Leitfragen:"),
            p("1. Welchen Einfluss haben die Achsenabschnitte auf die Preisdynamiken?"),
            p("2. Was sind die Implikationen unterschiedlicher Ausgangspreise?"),
@@ -147,7 +151,8 @@ server <- function(input, output) {
        intercept_angebot=input$intercept_supply_1, 
        slope_nachfrage=input$slope_demand_1, 
        slope_angebot=input$slope_supply_1,
-       plot_n=1
+       plot_n=1, 
+       fix_coord = input$fix_coordinates
      )
    })
    output$s_d_1 <- renderPlot({
@@ -202,7 +207,8 @@ server <- function(input, output) {
        intercept_angebot=input$intercept_supply_2, 
        slope_nachfrage=input$slope_demand_2, 
        slope_angebot=input$slope_supply_2,
-       plot_n=2
+       plot_n=2,
+       fix_coord = input$fix_coordinates
      )
    })
    output$s_d_2 <- renderPlot({
@@ -257,7 +263,8 @@ server <- function(input, output) {
        intercept_angebot=input$intercept_supply_3, 
        slope_nachfrage=input$slope_demand_3, 
        slope_angebot=input$slope_supply_3,
-       plot_n=3
+       plot_n=3,
+       fix_coord = input$fix_coordinates
      )
    })
    output$s_d_3 <- renderPlot({
