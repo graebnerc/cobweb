@@ -82,8 +82,10 @@ make_supply_demand_plot <- function(price_range,
   
   sp_plot <- ggplot(data=demand_supply_data,
          mapping=aes(x=Preis)) +
-    geom_line(aes(x=Preis, y=Nachfrage, color="Nachfrage")) +
-    geom_line(aes(x=Preis, y=Angebot, color="Angebot")) +
+    geom_line(aes(x=Preis, y=Nachfrage, color="Nachfrage"), 
+              key_glyph = draw_key_rect) +
+    geom_line(aes(x=Preis, y=Angebot, color="Angebot"), 
+              key_glyph = draw_key_rect) +
     xlab("Preis") + ylab("Menge") +
     coord_cartesian(ylim = c(0, 10), xlim = c(0, 11), 
                     expand = 0) + # expansion(mult = 0, add = 0)
