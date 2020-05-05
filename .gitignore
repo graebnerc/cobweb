@@ -12,6 +12,7 @@ quellen
 R
 beschreibung/*.out
 beschreibung/*.toc
+beschreibung/*.aux
 beschreibung/cobweb_modell_beschreibung.tex
 deploy_app.R
 rsconnect
