@@ -16,7 +16,7 @@ if (TRUE %in% versionstest){
   print(paste0(
     "ACHTUNG! Ihre R-Version ist veraltet! ",
     "Sie verwenden Version ", R.version$major, ".", R.version$minor, 
-    ", aber Sie sollten mindestens Version 3.6.1 verwenden. ",
+    ", aber Sie sollten mindestens Version 4.0.1 verwenden. ",
     "Installieren Sie zum Update R einfach neu!")
   )
 } else{
