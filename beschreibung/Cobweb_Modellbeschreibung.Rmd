@@ -137,14 +137,21 @@ $$\hat{p}_{t} = \hat{p}_{0} \mathcal{A}^t$$
 
 Nun können wir folgende drei Fälle auf Basis von $\mathcal{A}$
 unterscheiden, wobei zu bedenken ist, dass durch $\mathcal{A}=\frac{\beta}{\delta}$
-das Verhältnis der Preiselastizitäten des Angebots ($\epsilon_S=\beta$) 
-und der Nachfrage ($\epsilon_D=\delta$) angegeben wird:
+das Verhältnis der Steigung der Angebotskurve ($\beta$) 
+und der Nachfragekurve ($\delta$) angegeben wird:
 
-* $|\mathcal{A}|<1$: das Angebot ist elastischer als die Nachfrage
+* $|\mathcal{A}|<1$: die Angebotskurve ist steiler als die Nachfragekurve
 
-* $|\mathcal{A}|>1$: die Nachfrage ist elastischerals das Angebot 
+* $|\mathcal{A}|>1$: die Nachfragekurve ist steiler als die Angebotskurve 
 
-* $|\mathcal{A}|=1$: Angebot und Nachfrage sind gleich elastisch
+* $|\mathcal{A}|=1$: Angebots- und Nachfragekurve sind gleich steil
+
+> **Anmerkung:** Dieser Zusammenhang kann auch mit Hilfe von Preiselastizitäten
+ausgedrückt werde. Da diese in der Regel nicht konstant sind, werden solche
+Aussagen immer im Hinblick auf das Gleichgewicht getroffen. Der Fall
+$|\mathcal{A}|<1$ korrespondiert zu der Situation in der das Angebot im 
+Gleichgewicht elastischer ist als die Nachfrage und $|\mathcal{A}|>1$ zu der
+Situation in der die Nachfrage im Gleichgewicht elastischer ist als das Angebot.
 
 Die Implikationen für die Preisdynamiken können Sie unten durch Verwendung der
 Shiny-App selbst herleiten.
@@ -170,8 +177,6 @@ Diese Formel wird später bei der Simulation hilfreich.
 
 In diesem Beispiel arbeiten wir wie oben mit klassischen linearen Angebots- und
 Nachfragekurven. 
-Beachten Sie dabei, dass die Steigungsparameter hier gleichzeitig die
-Preiselastizitäten von Angebot und Nachfrage darstellen.
 
 ```{r}
 supply_func <- function(p, intercept_s, slope_s){
@@ -279,8 +284,7 @@ price_func <- function(p_0, intercept_demand, slope_demand,
 
 Nun können wir recht einfach unterschiedliche Fälle vergleichen und untersuchen
 wie die Konvergenzeigenschaften von den relativen Steigungen
-der Angebots- und Nachfragefunktion abhängen, also des relativen
-Preiselastizitäten, so wie im zweiten Abschnitt beschrieben.
+der Angebots- und Nachfragefunktion abhängen.
 Dazu simulieren wir zunächst die entsprechenden Daten:
 
 ```{r}
